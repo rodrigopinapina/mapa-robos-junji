@@ -36,7 +36,7 @@
         <script src="js/labels.js"></script>
         <script src="js/leaflet.photon.js"></script>
         <script src="data/Regional_1.js"></script>
-        <script src="data/Regional_2.js"></script>
+        <script src="data/RegionalSimplificada_2.js"></script>
         <script src="data/comunas_3.js"></script>
         <script src="data/jardines_junji_4.js"></script>
         <script>
@@ -160,10 +160,13 @@
         function style_Regional_1_0() {
             return {
                 pane: 'pane_Regional_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(0,0,0,0.5019607843137255)',
+                opacity: 1,
+                color: 'rgba(255,255,255,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 0,
                 interactive: true,
             }
         }
@@ -181,8 +184,11 @@
         });
         bounds_group.addLayer(layer_Regional_1);
         map.addLayer(layer_Regional_1);
-        function pop_Regional_2(feature, layer) {
+        function pop_RegionalSimplificada_2(feature, layer) {
             var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(String(feature.properties['fid']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(String(feature.properties['objectid']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
@@ -212,33 +218,33 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_Regional_2_0() {
+        function style_RegionalSimplificada_2_0() {
             return {
-                pane: 'pane_Regional_2',
+                pane: 'pane_RegionalSimplificada_2',
                 opacity: 1,
                 color: 'rgba(255,255,255,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 3.0, 
+                weight: 2.0, 
                 fillOpacity: 0,
                 interactive: true,
             }
         }
-        map.createPane('pane_Regional_2');
-        map.getPane('pane_Regional_2').style.zIndex = 402;
-        map.getPane('pane_Regional_2').style['mix-blend-mode'] = 'normal';
-        var layer_Regional_2 = new L.geoJson(json_Regional_2, {
+        map.createPane('pane_RegionalSimplificada_2');
+        map.getPane('pane_RegionalSimplificada_2').style.zIndex = 402;
+        map.getPane('pane_RegionalSimplificada_2').style['mix-blend-mode'] = 'normal';
+        var layer_RegionalSimplificada_2 = new L.geoJson(json_RegionalSimplificada_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Regional_2',
-            layerName: 'layer_Regional_2',
-            pane: 'pane_Regional_2',
-            onEachFeature: pop_Regional_2,
-            style: style_Regional_2_0,
+            dataVar: 'json_RegionalSimplificada_2',
+            layerName: 'layer_RegionalSimplificada_2',
+            pane: 'pane_RegionalSimplificada_2',
+            onEachFeature: pop_RegionalSimplificada_2,
+            style: style_RegionalSimplificada_2_0,
         });
-        bounds_group.addLayer(layer_Regional_2);
-        map.addLayer(layer_Regional_2);
+        bounds_group.addLayer(layer_RegionalSimplificada_2);
+        map.addLayer(layer_RegionalSimplificada_2);
         function pop_comunas_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
