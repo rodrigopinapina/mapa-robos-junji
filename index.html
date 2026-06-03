@@ -18,38 +18,98 @@
             padding: 0;
             margin: 0;
         }
+        
+        #header-panel {
+            position: fixed;
+            top: 10px;
+            left: 50px;
+            z-index: 9999;
+            background: rgba(255,255,255,0.92);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          
+        }
+        #header-panel strong {
+            font-size: 15px;
+            letter-spacing: 0.5px;
+          
+        }
+        #legend-panel {
+            position: fixed;
+            bottom: 30px;
+            left: 50px;
+            z-index: 9999;
+            background: rgba(255,255,255,0.92);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            line-height: 1.8;
+}
+#legend-panel strong {
+    font-size: 13px;
+    display: block;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.legend-circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: inline-block;
+    box-shadow: 0 0 2px rgba(0,0,0,0.4);
+    flex-shrink: 0;
+}
+        
         </style>
         <title></title>
     </head>
     <body>
-        <div style="
-  position: fixed;
-  top: 10px;
-  left: 50px;
-  z-index: 9999;
-  background: rgba(255,255,255,0.9);
-  padding: 10px 15px;
-  border-radius: 6px;
-  font-family: Arial, sans-serif;
-">
-  <img src="logo_junji.png" height="40" style="vertical-align:middle; margin-right:10px">
-  <strong style="font-size:16px;">JARDINES JUNJI CON ROBOS — REGIÓN DE VALPARAÍSO</strong>
-</div>
-        <div style="
-  position: fixed;
-  bottom: 30px;
-  left: 50px;
-  z-index: 9999;
-  background: rgba(255,255,255,0.9);
-  padding: 10px;
-  border-radius: 6px;
-  font-family: Arial, sans-serif;
-  font-size: 13px;
-">
-  <strong>Leyenda</strong><br>
-  <span style="color:#e8532e">●</span> Con robo registrado<br>
-  <span style="color:#aaaaaa">●</span> Sin robo
-</div>
+      <div style="
+        position: fixed;
+        top: 10px;
+        left: 50px;
+        z-index: 9999;
+        background: rgba(255,255,255,0.9);
+        padding: 10px 15px;
+        border-radius: 6px;
+        font-family: Arial, sans-serif;
+      ">
+        <img src="logo_junji.png" height="40" style="vertical-align:middle; margin-right:10px">
+        <strong style="font-size:16px;">JARDINES JUNJI CON ROBOS — REGIÓN DE VALPARAÍSO</strong>
+      </div>
+      
+      <div id="legend-panel">
+        <strong>Leyenda</strong>
+        <div class="legend-item">
+            <span class="legend-circle" style="background:rgba(255,84,0,0.8);"></span>
+            Con robo registrado
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background:rgba(31,120,180,1.0);"></span>
+            Obra paralizada con guardia
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background:rgba(255,241,20,1.0);"></span>
+            Obra paralizada sin guardia
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background:rgba(8,48,107,0.6); width:10px; height:10px;"></span>
+            Sin alertas
+        </div>
+      </div>
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
@@ -63,14 +123,16 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet.photon.js"></script>
-        <script src="data/Regional_1.js"></script>
-        <script src="data/RegionalSimplificada_2.js"></script>
-        <script src="data/comunas_3.js"></script>
-        <script src="data/jardines_junji_4.js"></script>
+        <script src="data/Regionalcorregida_1.js"></script>
+        <script src="data/comunas_2.js"></script>
+        <script src="data/areaspobladasReginValparasoareas_pobladas_3.js"></script>
+        <script src="data/redvial2019_4.js"></script>
+        <script src="data/jardines_junji_5.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[-33.984557159665044,-73.13012460864145],[-31.658719069417586,-69.14399994623639]]);
+        }).fitBounds([[-34.0,-72.0],[-31.5,-69.8]]);
+        map.setMaxBounds([[-35.0,-73.5],[-30.5,-68.5]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/qgis2web/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -141,20 +203,20 @@
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
-        map.createPane('pane_GoogleSatellite_0');
-        map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
-        var layer_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-            pane: 'pane_GoogleSatellite_0',
+        map.createPane('pane_ESRIGraydark_0');
+        map.getPane('pane_ESRIGraydark_0').style.zIndex = 400;
+        var layer_ESRIGraydark_0 = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRIGraydark_0',
             opacity: 1.0,
-            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            attribution: '',
             minZoom: 1,
             maxZoom: 28,
             minNativeZoom: 0,
             maxNativeZoom: 20
         });
-        layer_GoogleSatellite_0;
-        map.addLayer(layer_GoogleSatellite_0);
-        function pop_Regional_1(feature, layer) {
+        layer_ESRIGraydark_0;
+        map.addLayer(layer_ESRIGraydark_0);
+        function pop_Regionalcorregida_1(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(String(feature.properties['objectid']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
@@ -185,9 +247,9 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_Regional_1_0() {
+        function style_Regionalcorregida_1_0() {
             return {
-                pane: 'pane_Regional_1',
+                pane: 'pane_Regionalcorregida_1',
                 opacity: 1,
                 color: 'rgba(255,255,255,1.0)',
                 dashArray: '',
@@ -195,24 +257,63 @@
                 lineJoin: 'miter',
                 weight: 3.0, 
                 fillOpacity: 0,
-                interactive: true,
+                interactive: false,
             }
         }
-        map.createPane('pane_Regional_1');
-        map.getPane('pane_Regional_1').style.zIndex = 401;
-        map.getPane('pane_Regional_1').style['mix-blend-mode'] = 'normal';
-        var layer_Regional_1 = new L.geoJson(json_Regional_1, {
+        map.createPane('pane_Regionalcorregida_1');
+        map.getPane('pane_Regionalcorregida_1').style.zIndex = 401;
+        map.getPane('pane_Regionalcorregida_1').style['mix-blend-mode'] = 'normal';
+        var layer_Regionalcorregida_1 = new L.geoJson(json_Regionalcorregida_1, {
             attribution: '',
-            interactive: true,
-            dataVar: 'json_Regional_1',
-            layerName: 'layer_Regional_1',
-            pane: 'pane_Regional_1',
-            onEachFeature: pop_Regional_1,
-            style: style_Regional_1_0,
+            interactive: false,
+            dataVar: 'json_Regionalcorregida_1',
+            layerName: 'layer_Regionalcorregida_1',
+            pane: 'pane_Regionalcorregida_1',
+            onEachFeature: pop_Regionalcorregida_1,
+            style: style_Regionalcorregida_1_0,
         });
-        bounds_group.addLayer(layer_Regional_1);
-        map.addLayer(layer_Regional_1);
-        function pop_RegionalSimplificada_2(feature, layer) {
+        bounds_group.addLayer(layer_Regionalcorregida_1);
+        map.addLayer(layer_Regionalcorregida_1);
+        function pop_comunas_2(feature, layer) {
+            var popupContent = '<table>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_comunas_2_0() {
+            return {
+                pane: 'pane_comunas_2',
+                opacity: 1,
+                color: 'rgba(255,255,255,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.14901960784313725)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_comunas_2');
+        map.getPane('pane_comunas_2').style.zIndex = 402;
+        map.getPane('pane_comunas_2').style['mix-blend-mode'] = 'normal';
+        var layer_comunas_2 = new L.geoJson(json_comunas_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_comunas_2',
+            layerName: 'layer_comunas_2',
+            pane: 'pane_comunas_2',
+            onEachFeature: pop_comunas_2,
+            style: style_comunas_2_0,
+        });
+        bounds_group.addLayer(layer_comunas_2);
+        map.addLayer(layer_comunas_2);
+        function pop_areaspobladasReginValparasoareas_pobladas_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(String(feature.properties['fid']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
@@ -221,13 +322,7 @@
                         <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(String(feature.properties['objectid']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['cir_sena'] !== null ? autolinker.link(String(feature.properties['cir_sena']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['codregion'] !== null ? autolinker.link(String(feature.properties['codregion']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['area_km'] !== null ? autolinker.link(String(feature.properties['area_km']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['comuna'] !== null ? autolinker.link(String(feature.properties['comuna']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['st_area_sh'] !== null ? autolinker.link(String(feature.properties['st_area_sh']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
@@ -236,7 +331,10 @@
                         <td colspan="2">' + (feature.properties['st_length_'] !== null ? autolinker.link(String(feature.properties['st_length_']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Region'] !== null ? autolinker.link(String(feature.properties['Region']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Localidad'] !== null ? autolinker.link(String(feature.properties['Localidad']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Entidad'] !== null ? autolinker.link(String(feature.properties['Entidad']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -246,68 +344,32 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_RegionalSimplificada_2_0() {
+        function style_areaspobladasReginValparasoareas_pobladas_3_0() {
             return {
-                pane: 'pane_RegionalSimplificada_2',
-                opacity: 1,
-                color: 'rgba(255,255,255,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 2.0, 
-                fillOpacity: 0,
-                interactive: true,
+                pane: 'pane_areaspobladasReginValparasoareas_pobladas_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.5)',
+                interactive: false,
             }
         }
-        map.createPane('pane_RegionalSimplificada_2');
-        map.getPane('pane_RegionalSimplificada_2').style.zIndex = 402;
-        map.getPane('pane_RegionalSimplificada_2').style['mix-blend-mode'] = 'normal';
-        var layer_RegionalSimplificada_2 = new L.geoJson(json_RegionalSimplificada_2, {
+        map.createPane('pane_areaspobladasReginValparasoareas_pobladas_3');
+        map.getPane('pane_areaspobladasReginValparasoareas_pobladas_3').style.zIndex = 403;
+        map.getPane('pane_areaspobladasReginValparasoareas_pobladas_3').style['mix-blend-mode'] = 'normal';
+        var layer_areaspobladasReginValparasoareas_pobladas_3 = new L.geoJson(json_areaspobladasReginValparasoareas_pobladas_3, {
             attribution: '',
-            interactive: true,
-            dataVar: 'json_RegionalSimplificada_2',
-            layerName: 'layer_RegionalSimplificada_2',
-            pane: 'pane_RegionalSimplificada_2',
-            onEachFeature: pop_RegionalSimplificada_2,
-            style: style_RegionalSimplificada_2_0,
+            interactive: false,
+            dataVar: 'json_areaspobladasReginValparasoareas_pobladas_3',
+            layerName: 'layer_areaspobladasReginValparasoareas_pobladas_3',
+            pane: 'pane_areaspobladasReginValparasoareas_pobladas_3',
+            onEachFeature: pop_areaspobladasReginValparasoareas_pobladas_3,
+            style: style_areaspobladasReginValparasoareas_pobladas_3_0,
         });
-        bounds_group.addLayer(layer_RegionalSimplificada_2);
-        map.addLayer(layer_RegionalSimplificada_2);
-        function pop_comunas_3(feature, layer) {
+        bounds_group.addLayer(layer_areaspobladasReginValparasoareas_pobladas_3);
+        map.addLayer(layer_areaspobladasReginValparasoareas_pobladas_3);
+        function pop_redvial2019_4(feature, layer) {
             var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(String(feature.properties['objectid']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['shape_leng'] !== null ? autolinker.link(String(feature.properties['shape_leng']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['dis_elec'] !== null ? autolinker.link(String(feature.properties['dis_elec']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cir_sena'] !== null ? autolinker.link(String(feature.properties['cir_sena']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cod_comuna'] !== null ? autolinker.link(String(feature.properties['cod_comuna']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['codregion'] !== null ? autolinker.link(String(feature.properties['codregion']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['st_area_sh'] !== null ? autolinker.link(String(feature.properties['st_area_sh']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['st_length_'] !== null ? autolinker.link(String(feature.properties['st_length_']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Region'] !== null ? autolinker.link(String(feature.properties['Region']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Comuna'] !== null ? autolinker.link(String(feature.properties['Comuna']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Provincia'] !== null ? autolinker.link(String(feature.properties['Provincia']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
 			layer.on('popupopen', function(e) {
@@ -316,116 +378,167 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_comunas_3_0() {
+        function style_redvial2019_4_0() {
             return {
-                pane: 'pane_comunas_3',
+                pane: 'pane_redvial2019_4',
                 opacity: 1,
-                color: 'rgba(255,255,255,1.0)',
+                color: 'rgba(229,182,54,1.0)',
                 dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 1.0,
                 fillOpacity: 0,
                 interactive: false,
             }
         }
-        map.createPane('pane_comunas_3');
-        map.getPane('pane_comunas_3').style.zIndex = 403;
-        map.getPane('pane_comunas_3').style['mix-blend-mode'] = 'normal';
-        var layer_comunas_3 = new L.geoJson(json_comunas_3, {
+        map.createPane('pane_redvial2019_4');
+        map.getPane('pane_redvial2019_4').style.zIndex = 404;
+        map.getPane('pane_redvial2019_4').style['mix-blend-mode'] = 'normal';
+        var layer_redvial2019_4 = new L.geoJson(json_redvial2019_4, {
             attribution: '',
             interactive: false,
-            dataVar: 'json_comunas_3',
-            layerName: 'layer_comunas_3',
-            pane: 'pane_comunas_3',
-            onEachFeature: pop_comunas_3,
-            style: style_comunas_3_0,
+            dataVar: 'json_redvial2019_4',
+            layerName: 'layer_redvial2019_4',
+            pane: 'pane_redvial2019_4',
+            onEachFeature: pop_redvial2019_4,
+            style: style_redvial2019_4_0,
         });
-        bounds_group.addLayer(layer_comunas_3);
-        map.addLayer(layer_comunas_3);
-        function pop_jardines_junji_4(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">comuna</th>\
-                        <td>' + (feature.properties['comuna'] !== null ? autolinker.link(String(feature.properties['comuna']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">nombre</th>\
-                        <td>' + (feature.properties['nombre'] !== null ? autolinker.link(String(feature.properties['nombre']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">fecha_robo</th>\
-                        <td>' + (feature.properties['fecha_robo'] !== null ? autolinker.link(String(feature.properties['fecha_robo']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">tiene_robo</th>\
-                        <td>' + (feature.properties['tiene_robo'] !== null ? autolinker.link(String(feature.properties['tiene_robo']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
+        bounds_group.addLayer(layer_redvial2019_4);
+        map.addLayer(layer_redvial2019_4);
+        function pop_jardines_junji_5(feature, layer) {
+          var p = feature.properties;
+          function val(key) {
+            return p[key] !== null && p[key] !== undefined
+            ? autolinker.link(String(p[key]).replace(/'/g, "'").toLocaleString())
+                    : '—';
+            }
+            var popupContent = '<table style="min-width:220px;">\
+                <tr>\
+                    <th colspan="2" style="\
+                                             text-align:center;\
+                                             font-size:12px;\
+                                             font-weight:bold;\
+                                             letter-spacing:1px;\
+                                             padding:6px 0 8px 0;\
+                                             border-bottom: 2px solid #333;\
+                                             ">JARDINES JUNJI</th>\
+                </tr>\
+                <tr><th scope="row">Nombre</th><td>' + val('nombre') + '</td></tr>\
+                <tr><th scope="row">Comuna</th><td>' + val('comuna') + '</td></tr>\
+                <tr><th scope="row">Programa</th><td>' + val('programa') + '</td></tr>\
+                <tr><th scope="row">Estado</th><td>' + val('estado') + '</td></tr>\
+                <tr>\
+                    <td colspan="2" style="padding:4px 0;">\
+                        <hr style="border:none; border-top:1px solid #ccc; margin:0;">\
+                                             </td>\
+                                             </tr>\
+                                             <tr><th scope="row">Obra Paralizada</th><td>' + val('Obra Pararalizada') + '</td></tr>\
+                                             <tr><th scope="row">Con Guardias</th><td>' + val('Con guardias') + '</td></tr>\
+                                             <tr><th scope="row">Tiene Robo</th><td>' + val('tiene_robo') + '</td></tr>\
+                                             <tr><th scope="row">Fecha Robo</th><td>' + val('fecha_robo') + '</td></tr>\
+                                             <tr><th scope="row">Detalle Incidente</th><td>' + val('Detalle del incidente') + '</td></tr>\
+                                             </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
+            layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
+            layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_jardines_junji_4_0(feature) {
-            switch(String(feature.properties['tiene_robo'])) {
-                case 'No':
-                    return {
-                pane: 'pane_jardines_junji_4',
-                radius: 6.0,
-                opacity: 1,
-                color: 'rgba(255,255,255,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(62,112,147,1.0)',
-                interactive: true,
-            }
-                    break;
-                case 'Si':
-                    return {
-                pane: 'pane_jardines_junji_4',
-                radius: 12.0,
-                opacity: 1,
-                color: 'rgba(255,255,255,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,84,0,1.0)',
-                interactive: true,
-            }
-                    break;
-            }
-        }
-        map.createPane('pane_jardines_junji_4');
-        map.getPane('pane_jardines_junji_4').style.zIndex = 404;
-        map.getPane('pane_jardines_junji_4').style['mix-blend-mode'] = 'normal';
-        var layer_jardines_junji_4 = new L.geoJson(json_jardines_junji_4, {
+// Crear panes con zIndex diferente por categoría
+map.createPane('pane_jardines_alertas');
+map.getPane('pane_jardines_alertas').style.zIndex = 410; // encima del pane normal (405)
+
+map.createPane('pane_jardines_junji_5');
+map.getPane('pane_jardines_junji_5').style.zIndex = 405;
+map.getPane('pane_jardines_junji_5').style['mix-blend-mode'] = 'normal';
+
+function style_jardines_junji_5_0(feature) {
+    var context = { feature: feature, variables: {} };
+    if (exp_jardines_junji_5rule0_eval_expression(context)) {
+        return {
+            pane: 'pane_jardines_alertas', // pane superior
+            radius: 14.0, opacity: 1,
+            color: 'rgba(255,255,255,1.0)',
+            weight: 1, fill: true, fillOpacity: 1,
+            fillColor: 'rgba(255,84,0,0.8)', interactive: true,
+        };
+    } else if (exp_jardines_junji_5rule1_eval_expression(context)) {
+        return {
+            pane: 'pane_jardines_alertas',
+            radius: 14.0, opacity: 1,
+            color: 'rgba(255,255,255,1.0)',
+            weight: 1, fill: true, fillOpacity: 1,
+            fillColor: 'rgba(31,120,180,1.0)', interactive: true,
+        };
+    } else if (exp_jardines_junji_5rule2_eval_expression(context)) {
+        return {
+            pane: 'pane_jardines_alertas',
+            radius: 14.0, opacity: 1,
+            color: 'rgba(255,255,255,1.0)',
+            weight: 1, fill: true, fillOpacity: 1,
+            fillColor: 'rgba(255,241,20,1.0)', interactive: true,
+        };
+    } else if (exp_jardines_junji_5rule3_eval_expression(context)) {
+        return {
+            pane: 'pane_jardines_junji_5',
+            radius: 6.0, opacity: 1,
+            color: 'rgba(255,255,255,1.0)',
+            weight: 1, fill: true, fillOpacity: 1,
+            fillColor: 'rgba(8,48,107,0.6)', interactive: true,
+        };
+    } else {
+        return {fill: false, stroke: false};
+    }
+}
+        var layer_jardines_junji_5 = new L.geoJson(json_jardines_junji_5, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_jardines_junji_4',
-            layerName: 'layer_jardines_junji_4',
-            pane: 'pane_jardines_junji_4',
-            onEachFeature: pop_jardines_junji_4,
+            dataVar: 'json_jardines_junji_5',
+            layerName: 'layer_jardines_junji_5',
+            pane: 'pane_jardines_junji_5',
+            onEachFeature: pop_jardines_junji_5,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_jardines_junji_4_0(feature));
+                return L.circleMarker(latlng, style_jardines_junji_5_0(feature));
             },
         });
-        bounds_group.addLayer(layer_jardines_junji_4);
-        map.addLayer(layer_jardines_junji_4);
+        bounds_group.addLayer(layer_jardines_junji_5);
+        layer_jardines_junji_5.on('layeradd', function(e) {
+          var marker = e.layer;
+          var fill = marker.options.fillColor;
+          if (fill === 'rgba(255,84,0,0.8)' || 
+              fill === 'rgba(255,241,20,1.0)' || 
+              fill === 'rgba(31,120,180,1.0)') {
+              marker.setZIndexOffset(1000);
+          }
+        });
+        map.addLayer(layer_jardines_junji_5);
         setBounds();
+        var i = 0;
+        layer_comunas_2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Comuna'] !== null?String('<div style="color: #ffffff; font-size: 7pt; font-family: \'DINPro\', sans-serif;">' + layer.feature.properties['Comuna']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_comunas_2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        resetLabels([layer_comunas_2]);
+        map.on("zoomend", function(){
+            resetLabels([layer_comunas_2]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_comunas_2]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_comunas_2]);
+        });
         </script>        
     </body>
 </html>

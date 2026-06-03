@@ -754,3 +754,56 @@ function fnc__specialcol_(values, context) {
 function fnc_project_color(values, context) {
     return false;
 };
+
+
+
+function exp_jardines_junji_5rule0_eval_expression(context) {
+    // tiene_robo = 'Si'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['tiene_robo']  == 'Si');
+    } else {
+        return (feature['tiene_robo']  == 'Si');
+    }
+}
+
+
+function exp_jardines_junji_5rule1_eval_expression(context) {
+    // "Obra Pararalizada" = 'Si' AND "Con guardias" = 'Si'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['Obra Pararalizada']  == 'Si') && (feature.properties['Con guardias']  == 'Si'));
+    } else {
+        return ((feature['Obra Pararalizada']  == 'Si') && (feature['Con guardias']  == 'Si'));
+    }
+}
+
+
+function exp_jardines_junji_5rule2_eval_expression(context) {
+    // "Obra Pararalizada" = 'Si' AND "Con guardias" = 'No' OR "Con guardias" = 'No (en proceso de contratación)'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (((feature.properties['Obra Pararalizada']  == 'Si') && (feature.properties['Con guardias']  == 'No')) || (feature.properties['Con guardias']  == 'No (en proceso de contratación)'));
+    } else {
+        return (((feature['Obra Pararalizada']  == 'Si') && (feature['Con guardias']  == 'No')) || (feature['Con guardias']  == 'No (en proceso de contratación)'));
+    }
+}
+
+
+function exp_jardines_junji_5rule3_eval_expression(context) {
+    // "Obra Pararalizada" = 'No' AND tiene_robo = 'No'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['Obra Pararalizada']  == 'No') && (feature.properties['tiene_robo']  == 'No'));
+    } else {
+        return ((feature['Obra Pararalizada']  == 'No') && (feature['tiene_robo']  == 'No'));
+    }
+}
