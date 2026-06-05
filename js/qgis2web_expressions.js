@@ -771,39 +771,39 @@ function exp_jardines_junji_5rule0_eval_expression(context) {
 
 
 function exp_jardines_junji_5rule1_eval_expression(context) {
-    // "Obra Pararalizada" = 'Si' AND "Con guardias" = 'Si'
+    // obra_paralizada = 'Si' AND con_guardias = 'Si'
 
     var feature = context.feature;
     
     if (feature.properties) {
-        return ((feature.properties['Obra Pararalizada']  == 'Si') && (feature.properties['Con guardias']  == 'Si'));
+        return ((feature.properties['obra_paralizada']  == 'Si') && (feature.properties['con_guardias']  == 'Si'));
     } else {
-        return ((feature['Obra Pararalizada']  == 'Si') && (feature['Con guardias']  == 'Si'));
+        return ((feature['obra_paralizada']  == 'Si') && (feature['con_guardias']  == 'Si'));
     }
 }
 
 
 function exp_jardines_junji_5rule2_eval_expression(context) {
-    // "Obra Pararalizada" = 'Si' AND "Con guardias" = 'No' OR "Con guardias" = 'No (en proceso de contratación)'
+    // obra_paralizada = 'Si' AND con_guardias LIKE 'No%'
 
     var feature = context.feature;
     
     if (feature.properties) {
-        return (((feature.properties['Obra Pararalizada']  == 'Si') && (feature.properties['Con guardias']  == 'No')) || (feature.properties['Con guardias']  == 'No (en proceso de contratación)'));
+        return ((feature.properties['obra_paralizada']  == 'Si') && (feature.properties['con_guardias'].indexOf('No') > -1));
     } else {
-        return (((feature['Obra Pararalizada']  == 'Si') && (feature['Con guardias']  == 'No')) || (feature['Con guardias']  == 'No (en proceso de contratación)'));
+        return ((feature['obra_paralizada']  == 'Si') && (feature['con_guardias'].indexOf('No') > -1));
     }
 }
 
 
 function exp_jardines_junji_5rule3_eval_expression(context) {
-    // "Obra Pararalizada" = 'No' AND tiene_robo = 'No'
+    // obra_paralizada = 'No' AND tiene_robo = 'No'
 
     var feature = context.feature;
     
     if (feature.properties) {
-        return ((feature.properties['Obra Pararalizada']  == 'No') && (feature.properties['tiene_robo']  == 'No'));
+        return ((feature.properties['obra_paralizada']  == 'No') && (feature.properties['tiene_robo']  == 'No'));
     } else {
-        return ((feature['Obra Pararalizada']  == 'No') && (feature['tiene_robo']  == 'No'));
+        return ((feature['obra_paralizada']  == 'No') && (feature['tiene_robo']  == 'No'));
     }
 }
